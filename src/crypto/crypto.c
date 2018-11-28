@@ -63,7 +63,7 @@ uint32_t OPENSSL_ia32cap_P[4] = {0};
 
 uint32_t OPENSSL_armcap_P =
 #if defined(OPENSSL_STATIC_ARMCAP_NEON) || defined(__ARM_NEON__)
-    ARMV7_NEON |
+    ARMV7_NEON | ARMV7_NEON_FUNCTIONAL |
 #endif
 #if defined(OPENSSL_STATIC_ARMCAP_AES)
     ARMV8_AES |
@@ -79,8 +79,10 @@ uint32_t OPENSSL_armcap_P =
 #endif
     0;
 
+#elif defined(__ARM_NEON__)
+uint32_t OPENSSL_armcap_P = ARMV7_NEON | ARMV7_NEON_FUNCTIONAL;
 #else
-uint32_t OPENSSL_armcap_P = 0;
+uint32_t OPENSSL_armcap_P = ARMV7_NEON_FUNCTIONAL;
 #endif
 
 #endif

@@ -53,6 +53,39 @@ function(perlasm dest src)
   )
 endfunction()
 
+if (${ARCH} STREQUAL "x86_64")
+  set(
+    CRYPTO_ARCH_SOURCES
+
+    cpu-intel.c
+  )
+endif()
+
+if (${ARCH} STREQUAL "x86")
+  set(
+    CRYPTO_ARCH_SOURCES
+
+    cpu-intel.c
+  )
+endif()
+
+if (${ARCH} STREQUAL "arm")
+  set(
+    CRYPTO_ARCH_SOURCES
+
+    cpu-arm.c
+    cpu-arm-asm.S
+  )
+endif()
+
+if (${ARCH} STREQUAL "aarch64")
+  set(
+    CRYPTO_ARCH_SOURCES
+
+    cpu-arm.c
+  )
+endif()
+
 # Level 0.1 - depends on nothing outside this set.
 add_subdirectory(stack)
 add_subdirectory(lhash)
@@ -110,10 +143,6 @@ add_subdirectory(test)
 add_library(
   crypto
 
-  cpu-aarch64-linux.c
-  cpu-arm.c
-  cpu-arm-linux.c
-  cpu-intel.c
   crypto.c
   directory_posix.c
   directory_win.c
@@ -126,6 +155,8 @@ add_library(
   thread_pthread.c
   thread_win.c
   time_support.c
+
+  ${CRYPTO_ARCH_SOURCES}
 
   $<TARGET_OBJECTS:stack>
   $<TARGET_OBJECTS:lhash>
